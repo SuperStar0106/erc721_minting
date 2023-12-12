@@ -8,6 +8,8 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import theme from "./styles/DarkTheme";
 
+import { ChildrenWrapper, LayoutWrapper } from "./layout.style";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -19,8 +21,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider theme={theme}>
-          <Header />
-          {children}
+          <LayoutWrapper>
+            <Header />
+            <ChildrenWrapper>{children}</ChildrenWrapper>
+          </LayoutWrapper>
           <Footer />
         </ThemeProvider>
       </body>

@@ -1,7 +1,14 @@
+"use client";
+
 import React from "react";
+import { LabelCardComponent } from "../components";
 
 const Minting: React.FC = () => {
-  return <h1>Minting Page</h1>;
+  return (
+    <>
+      <LabelCardComponent />
+    </>
+  );
 };
 
 export default Minting;

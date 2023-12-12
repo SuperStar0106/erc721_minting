@@ -1,22 +1,24 @@
 import Link from "next/link";
+import {
+  HeaderWrapper,
+  WhiteLabelWrapper,
+  GradientLabelWrapper,
+} from "./index.style";
+import { Wallet } from "@/app/assets/images/svg";
 
 const Header = () => {
   return (
-    <header>
-      <nav>
-        <ul>
-          <li>
-            <Link href="/">Home</Link>
-          </li>
-          <li>
-            <Link href="/about">About</Link>
-          </li>
-          <li>
-            <Link href="/contact">Contact</Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+    <HeaderWrapper>
+      <div style={{ display: "flex" }}>
+        <WhiteLabelWrapper style={{ marginRight: "13px" }}>
+          NFT
+        </WhiteLabelWrapper>
+        <GradientLabelWrapper>SEA</GradientLabelWrapper>
+      </div>
+      <div>
+        <Wallet />
+      </div>
+    </HeaderWrapper>
   );
 };
 
