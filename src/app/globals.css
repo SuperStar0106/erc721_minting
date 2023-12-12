@@ -11,13 +11,15 @@ body {
 }
 
 html {
-  background: rgba(0, 0, 0, 0.67);
+  background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(22.5px);
 }
 
 body {
   color: rgb(var(--foreground-rgb));
   min-height: 100vh;
+  position: absolute;
+  width: 100%;
 }
 
 a {

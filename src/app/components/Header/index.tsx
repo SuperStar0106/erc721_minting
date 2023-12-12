@@ -4,7 +4,7 @@ import {
   WhiteLabelWrapper,
   GradientLabelWrapper,
 } from "./index.style";
-import { Wallet } from "@/app/assets/images/svg";
+import { Wallet } from "../../../../assets/images/svg";
 
 const Header = () => {
   return (

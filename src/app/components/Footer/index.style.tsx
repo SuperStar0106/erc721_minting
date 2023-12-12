@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 export const FooterWrapper = styled.div`
   display: flex;
-  height: 70px;
+  min-height: 70px;
   background: ${(props) => props.theme.colors.black};
   color: ${(props) => props.theme.colors.white};
   align-items: center;
@@ -12,6 +12,7 @@ export const FooterWrapper = styled.div`
   width: 100%;
   position: absolute;
   bottom: 0;
+  z-index: 1;
 `;
 
 export const WhiteLabelWrapper = styled.div`
