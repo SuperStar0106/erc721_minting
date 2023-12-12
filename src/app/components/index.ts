@@ -1,2 +1,2 @@
-export * from './Card';
+export * from './NFTCard';
 export * from './LabelCard';
