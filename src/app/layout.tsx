@@ -31,7 +31,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider theme={theme}>
-          {/* <div style={{ position: "absolute" }}> */}
           <BackCircleWrapper1 />
           <BackCircleWrapper2 />
           <BackCircleWrapper3 />
@@ -39,12 +38,12 @@ export default function RootLayout({
           <BackCircleWrapper5 />
           <BackCircleWrapper6 />
           <BackCircleWrapper7 />
+
           <LayoutWrapper>
             <Header />
             <ChildrenWrapper>{children}</ChildrenWrapper>
           </LayoutWrapper>
           <Footer />
-          {/* </div> */}
         </ThemeProvider>
       </body>
     </html>

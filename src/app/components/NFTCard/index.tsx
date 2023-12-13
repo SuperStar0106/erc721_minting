@@ -4,23 +4,24 @@ import {
   NFTImageWrapper,
   NFTTitleWrapper,
 } from "./index.style";
-import Image from "next/image";
-import fish from "./fish.png";
+import Image, { StaticImageData } from "next/image";
 
-export const NFTCardComponent: React.FC = () => {
+type NFTCardComponentProps = {
+  showModal: (title: string, img: StaticImageData) => void;
+  title: string;
+  img: StaticImageData;
+};
+
+export const NFTCardComponent: React.FC<NFTCardComponentProps> = (props) => {
+  const { showModal, title, img } = props;
+
   return (
     <NFTCardWrapper>
       <div>
-        <NFTImageWrapper>
-          <Image
-            alt="img"
-            src={fish}
-            // layout="fill"
-            objectFit="cover"
-            sizes="100px"
-          ></Image>
+        <NFTImageWrapper onClick={() => showModal(title, img)}>
+          <Image alt="img" src={img} objectFit="cover" sizes="100px"></Image>
         </NFTImageWrapper>
-        <NFTTitleWrapper>Dorippa Panthera</NFTTitleWrapper>
+        <NFTTitleWrapper>{title}</NFTTitleWrapper>
       </div>
     </NFTCardWrapper>
   );
