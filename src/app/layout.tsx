@@ -1,11 +1,12 @@
 "use client";
 
+import { useState } from "react";
+
 import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "styled-components";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import { Header, Footer, Sidebar } from "./components";
 import theme from "./styles/DarkTheme";
 
 import {
@@ -27,6 +28,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -40,9 +47,10 @@ export default function RootLayout({
           <BackCircleWrapper7 />
 
           <LayoutWrapper>
-            <Header />
+            <Header toggleSidebar={toggleSidebar} />
             <ChildrenWrapper>{children}</ChildrenWrapper>
           </LayoutWrapper>
+          <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
           <Footer />
         </ThemeProvider>
       </body>

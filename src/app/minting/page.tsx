@@ -24,7 +24,7 @@ const Minting: React.FC = () => {
         <UploaderComponent />
         <StyledInputWrapper />
         <TextWrapper placeholder="Description" />
-        <div style={{ maxWidth: "545px" }}>
+        <div style={{ minWidth: "545px", display: "flex" }}>
           <ButtonDivWrapper>Mint without listing</ButtonDivWrapper>
           <ButtonDivWrapper>
             <ButtonComponent style={{ width: "100%", height: "63px" }}>
