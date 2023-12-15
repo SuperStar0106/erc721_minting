@@ -1,7 +1,8 @@
+import React from "react";
 import { FooterWrapper } from "./index.style";
 import { WhiteLabelWrapper, GradientLabelWrapper } from "./index.style";
 
-const Footer = () => {
+export const Footer: React.FC = () => {
   return (
     <FooterWrapper>
       <div style={{ display: "flex", position: "absolute", left: "150px" }}>
@@ -14,5 +15,3 @@ const Footer = () => {
     </FooterWrapper>
   );
 };
-
-export default Footer;

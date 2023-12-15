@@ -1,4 +1,4 @@
-import Link from "next/link";
+import React from "react";
 import {
   HeaderWrapper,
   WhiteLabelWrapper,
@@ -6,7 +6,13 @@ import {
 } from "./index.style";
 import { Wallet } from "../../../../assets/images/svg";
 
-const Header = () => {
+type HeaderProps = {
+  toggleSidebar: () => void;
+};
+
+export const Header: React.FC<HeaderProps> = (props) => {
+  const { toggleSidebar } = props;
+
   return (
     <HeaderWrapper>
       <div style={{ display: "flex" }}>
@@ -15,11 +21,9 @@ const Header = () => {
         </WhiteLabelWrapper>
         <GradientLabelWrapper>SEA</GradientLabelWrapper>
       </div>
-      <div>
+      <div onClick={toggleSidebar} style={{ cursor: "pointer" }}>
         <Wallet />
       </div>
     </HeaderWrapper>
   );
 };
-
-export default Header;

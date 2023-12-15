@@ -1,7 +1,7 @@
 import React from "react";
 import { IconProps } from "@/app/types/components/Icon";
 
-const Discord: React.FC<IconProps> = ({
+const Wallet: React.FC<IconProps> = ({
   iSize = { x: 22, y: 24 },
   iColor = "black",
 }) => {
@@ -21,4 +21,4 @@ const Discord: React.FC<IconProps> = ({
   );
 };
 
-export default Discord;
+export default Wallet;

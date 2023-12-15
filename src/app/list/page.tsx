@@ -16,7 +16,7 @@ import {
 import Image, { StaticImageData } from "next/image";
 import fish from "./fish.png";
 
-const Minting: React.FC = () => {
+const List: React.FC = () => {
   const [isShowing, setIsShowing] = useState<boolean>(false);
   const [selectedNFT, setSelectedNFT] = useState<{
     title: string;
@@ -66,7 +66,8 @@ const Minting: React.FC = () => {
                 src={selectedNFT.img}
                 objectFit="cover"
                 style={{ width: "80%", height: "80%" }}
-              ></Image>
+                priority={true}
+              />
             )}
           </NFTImageWrapper>
           <div>
@@ -85,4 +86,4 @@ const Minting: React.FC = () => {
   );
 };
 
-export default Minting;
+export default List;
