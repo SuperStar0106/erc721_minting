@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   SidebarWrapper,
   CloseButton,
@@ -8,12 +8,8 @@ import {
   GradientTextWrapper,
 } from "./index.style";
 import { ConnectButtonComponent } from "../ConnectButton";
-import {
-  Metamask,
-  Portis,
-  Torus,
-  Walletlink,
-} from "../../../../assets/images/svg";
+import { WalletContext } from "@/app/context";
+import { connectors } from "@/app/config/config";
 
 type SidebarProps = {
   isOpen: boolean;
@@ -21,7 +17,32 @@ type SidebarProps = {
 };
 
 export const Sidebar: React.FC<SidebarProps> = (props) => {
+  const { active, getAccount, connect, disconnect } = useContext(WalletContext);
+
   const { isOpen, toggleSidebar } = props;
+  const [clickedButton, setClickedButton] = useState<{
+    [key: number]: boolean;
+  }>({});
+
+  const handleClick = async (index: number) => {
+    if (!active) {
+      await connect();
+    } else {
+      disconnect();
+    }
+    setClickedButton({ [index]: true });
+  };
+
+  useEffect(() => {
+    const connected = sessionStorage.getItem("isConnected");
+    if (connected === "connected") {
+      if (!active) {
+        connect();
+      } else {
+        disconnect();
+      }
+    }
+  }, []);
 
   return (
     <>
@@ -32,18 +53,18 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
             <CloseButton onClick={toggleSidebar}>&times;</CloseButton>
           </SidebarHeaderWrapper>
           <SidebarContentWrapper>
-            <ConnectButtonComponent text="Connect Metamask">
-              <Metamask />
-            </ConnectButtonComponent>
-            <ConnectButtonComponent text="Connect Portis">
-              <Portis />
-            </ConnectButtonComponent>
-            <ConnectButtonComponent text="Connect Torus">
-              <Portis />
-            </ConnectButtonComponent>
-            <ConnectButtonComponent text="Connect Walletlink">
-              <Portis />
-            </ConnectButtonComponent>
+            {connectors.map((item: any, index: number) => (
+              <ConnectButtonComponent
+                key={`wallet-connector-${index}`}
+                text={`${
+                  active && clickedButton[index] ? getAccount() : item.title
+                }`}
+                active={active && clickedButton[index]}
+                onClick={() => handleClick(index)}
+              >
+                {<item.icon />}
+              </ConnectButtonComponent>
+            ))}
             <div style={{ display: "flex" }}>
               Dont have a wallet? &nbsp;
               <GradientTextWrapper>Learn more</GradientTextWrapper>

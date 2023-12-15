@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
-export const ConnectButtonWrapper = styled.button`
-  display: flex;
+type ConnectButtonWrapper = {
+  active: boolean;
+};
+
+export const ConnectButtonWrapper = styled.button<ConnectButtonWrapper>`
+  display: ${(props) => props.active ? 'block' : 'flex'};
   padding: 10px 24px 10px 24px;
   flex-direction: column;
   align-items: flex-start;
@@ -18,7 +22,7 @@ export const ConnectButtonWrapper = styled.button`
   text-align: center;
   font-feature-settings: 'clig' off, 'liga' off;
   font-family: Open Sans;
-  font-size: 20px;
+  font-size: ${(props) => props.active ? 'small' : '20px'};
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
