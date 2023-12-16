@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const MintingFormWrapper = styled.div`
+export const MintingFormWrapper = styled.form`
     display: flex;
     align-items: center;
     justify-content: center;

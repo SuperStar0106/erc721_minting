@@ -1,9 +1,17 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import Image from "next/image";
-import { FormWrapper, UplodedRowWrapper, UploadContent } from "./index.style";
+import { FormWrapper, UploadContent } from "./index.style";
+import { UseFormRegister } from "react-hook-form";
 import { Upload } from "../../../../assets/images/svg";
 
-export const UploaderComponent: React.FC = () => {
+type UploaderComponentProps = {
+  fieldName: string;
+  register?: UseFormRegister<any>;
+};
+
+export const UploaderComponent: React.FC<UploaderComponentProps> = (props) => {
+  const { register, fieldName, ...rest } = props;
+
   const [image, setImage] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>("No selected file");
 
@@ -33,7 +41,14 @@ export const UploaderComponent: React.FC = () => {
           accept="image/*"
           className="input-field"
           hidden
-          onChange={handleFileChange}
+          {...rest}
+          {...(register &&
+            register(fieldName!, {
+              onChange: (e) => {
+                handleFileChange(e);
+              },
+            }))}
+          // multiple
         />
 
         {image ? (
