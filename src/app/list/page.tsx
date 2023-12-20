@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   LabelCardComponent,
   NFTCardComponent,
@@ -14,6 +14,8 @@ import {
   NFTDescriptionWrapper,
 } from "./page.style";
 import Image, { StaticImageData } from "next/image";
+import { getMintedNFT } from "../utils";
+import { NftMetadata } from "../types/metadata";
 import fish from "./fish.png";
 
 const List: React.FC = () => {
@@ -22,6 +24,7 @@ const List: React.FC = () => {
     title: string;
     img: StaticImageData | null;
   }>({ title: "", img: null });
+  const [nfts, setNfts] = useState<NftMetadata[]>([]);
 
   const showModal = (title: string, img: StaticImageData) => {
     setSelectedNFT({ title, img });
@@ -31,6 +34,19 @@ const List: React.FC = () => {
   const hideModal = () => {
     setIsShowing(false);
   };
+
+  useEffect(() => {
+    const fetchNFTs = async () => {
+      const response = await getMintedNFT(
+        "0x6b79b791b9eA07A08c7f5fc09c4a9576Ae0ba62c"
+      );
+      if (response.success) {
+        setNfts(response.result);
+      }
+    };
+
+    fetchNFTs();
+  }, []);
 
   return (
     <>

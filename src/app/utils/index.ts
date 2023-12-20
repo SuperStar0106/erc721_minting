@@ -1,1 +1,2 @@
-export * from './pinata.ipfs.instance';
+export * from './interact';
+export * from './pinata';

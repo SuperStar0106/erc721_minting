@@ -12,11 +12,11 @@ import {
   TextWrapper,
   ButtonDivWrapper,
 } from "./page.style";
-import { pinFileToIPFS, uploadMetadata } from "../utils";
+import { pinFileToIPFS, mintNFT, getMintedNFT } from "../utils";
 import { useForm } from "react-hook-form";
 
 type FormValuesProps = {
-  title: string;
+  name: string;
   description: string;
   image: File;
 };
@@ -25,34 +25,49 @@ const Minting: React.FC = () => {
   const { register, handleSubmit } = useForm<FormValuesProps>();
 
   const [file, setFile] = useState<File | null>(null);
+  // const [walletAddress, setWallet] = useState("");
+  // const [status, setStatus] = useState("");
 
-  const onSubmit = (data: FormValuesProps) => {
-    console.log(data);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [url, setURL] = useState("");
 
-    console.log(data.title);
-    console.log(data.description);
+  const onSubmit = async (data: FormValuesProps) => {
+    console.log("input data: ", data);
+    const name = data.name;
+    const description = data.description;
 
-    const file = data.image;
-    const pinataApiKey = process.env.NEXT_PUBLIC_PINATA_API_KEY;
-    const pinataSecretApiKey = process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY;
-    if (data.image && pinataApiKey && pinataSecretApiKey) {
-      pinFileToIPFS(file[0], pinataApiKey, pinataSecretApiKey)
-        .then((data) => {
-          console.log("image data: ", data);
-
-          uploadMetadata(
-            data.title,
-            data.description,
-            "https://localhost:3000/list",
-            data.IpfsHash
-          )
-            .then((data) => {
-              console.log(data);
-            })
-            .catch((error) => console.log(error));
-        })
-        .catch((error) => console.log(error));
+    const pinataFileResponse = await pinFileToIPFS(data.image[0]);
+    if (!pinataFileResponse.success || !pinataFileResponse.pinataUrl) {
+      console.log(pinataFileResponse.message);
+      return;
     }
+
+    pinataFileResponse.pinataUrl && setURL(pinataFileResponse.pinataUrl);
+    console.log("pinata file upload response: ", pinataFileResponse);
+
+    // const { success, status } = await mintNFT(
+    //   pinataFileResponse.pinataUrl,
+    //   data.name,
+    //   data.description,
+    //   "0x6b79b791b9eA07A08c7f5fc09c4a9576Ae0ba62c"
+    // );
+
+    // const { success, status } = await getMintedNFT(
+    //   "0x6b79b791b9eA07A08c7f5fc09c4a9576Ae0ba62c"
+    // );
+    // console.log(status);
+
+    await getMintedNFT("0x6b79b791b9eA07A08c7f5fc09c4a9576Ae0ba62c");
+
+    // if (success) {
+    //   setName("");
+    //   setDescription("");
+    //   setURL("");
+    // } else {
+    //   console.log("upload token status: ", status);
+    // }
+    // console.log("mint nft result: ", success);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,8 +82,15 @@ const Minting: React.FC = () => {
       />
       <MintingFormWrapper onSubmit={handleSubmit(onSubmit)}>
         <UploaderComponent register={register} fieldName="image" />
-        <StyledInputWrapper {...register("title")} />
-        <TextWrapper placeholder="Description" {...register("description")} />
+        <StyledInputWrapper
+          {...register("name")}
+          // onChange={(event) => setName(event.target.value)}
+        />
+        <TextWrapper
+          placeholder="Description"
+          {...register("description")}
+          // onChange={(event) => setDescription(event.target.value)}
+        />
         <div style={{ minWidth: "545px", display: "flex" }}>
           <ButtonDivWrapper>Mint without listing</ButtonDivWrapper>
           <ButtonDivWrapper>
