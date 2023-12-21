@@ -1,6 +1,19 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# NFT Minter
+This is a Next.js application that allows users to mint their own NFTs. The application uses the following technologies:
+- **Next.js**: A React framework for building JavaScript applications.
+- **Moralis**: A backend infrastructure for dApps and blockchain apps. It provides a serverless platform to build decentralized applications.
+- **Ethers.js**: A library for interacting with the Ethereum blockchain and its ecosystem.
+- **IPFS**: A protocol and network designed to create a content-addressable, peer-to-peer method of storing and sharing hypermedia in a distributed file system.
+- **Pinata**: A service for hosting files on IPFS.
+
 
 ## Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development purposes.
+
+Clone the project
+```bash
+git clone https://github.com/SuperStar0106/erc721_minting.git
+```
 
 First, run the development server:
 
@@ -16,18 +29,26 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+You can check out [the Next.js GitHub repository](https://github.com/SuperStar0106/erc721_minting.git) - your feedback and contributions are welcome!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Connect wallet
+Integrated with several wallets such as Metamask, Portis, Torus and Walletlink. Used `useWeb3React` provided by `@web3-react/core`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+example:<br>
+`
+export const injectedConnector = new InjectedConnector({ supportedChainIds: [1, 4, 5] });
+await activate(connector);
+`
+
+### Mint NFTs
+Used ether.js to mint the NFTs.
+example:<br>
+`
+const tx = await contract721.mint(walletAddress, tokenURI);
+const receipt = await tx.wait();
+`
 
 ## Deploy on Vercel
 
