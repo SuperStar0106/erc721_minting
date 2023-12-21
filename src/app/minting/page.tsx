@@ -46,28 +46,21 @@ const Minting: React.FC = () => {
     pinataFileResponse.pinataUrl && setURL(pinataFileResponse.pinataUrl);
     console.log("pinata file upload response: ", pinataFileResponse);
 
-    // const { success, status } = await mintNFT(
-    //   pinataFileResponse.pinataUrl,
-    //   data.name,
-    //   data.description,
-    //   "0x6b79b791b9eA07A08c7f5fc09c4a9576Ae0ba62c"
-    // );
+    const { success, status } = await mintNFT(
+      pinataFileResponse.pinataUrl,
+      data.name,
+      data.description,
+      "0x6b79b791b9eA07A08c7f5fc09c4a9576Ae0ba62c"
+    );
 
-    // const { success, status } = await getMintedNFT(
-    //   "0x6b79b791b9eA07A08c7f5fc09c4a9576Ae0ba62c"
-    // );
-    // console.log(status);
-
-    await getMintedNFT("0x6b79b791b9eA07A08c7f5fc09c4a9576Ae0ba62c");
-
-    // if (success) {
-    //   setName("");
-    //   setDescription("");
-    //   setURL("");
-    // } else {
-    //   console.log("upload token status: ", status);
-    // }
-    // console.log("mint nft result: ", success);
+    if (success) {
+      setName("");
+      setDescription("");
+      setURL("");
+    } else {
+      console.log("upload token status: ", status);
+    }
+    console.log("mint nft result: ", success);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {

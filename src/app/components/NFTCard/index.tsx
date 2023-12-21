@@ -7,19 +7,26 @@ import {
 import Image, { StaticImageData } from "next/image";
 
 type NFTCardComponentProps = {
-  showModal: (title: string, img: StaticImageData) => void;
+  showModal: (title: string, img: string, description: string) => void;
   title: string;
-  img: StaticImageData;
+  img: string;
+  description: string;
 };
 
 export const NFTCardComponent: React.FC<NFTCardComponentProps> = (props) => {
-  const { showModal, title, img } = props;
+  const { showModal, title, img, description } = props;
 
   return (
     <NFTCardWrapper>
       <div>
-        <NFTImageWrapper onClick={() => showModal(title, img)}>
-          <Image alt="img" src={img} objectFit="cover" sizes="100px"></Image>
+        <NFTImageWrapper onClick={() => showModal(title, img, description)}>
+          <Image
+            alt="img"
+            src={img}
+            objectFit="cover"
+            width={100}
+            height={100}
+          />
         </NFTImageWrapper>
         <NFTTitleWrapper>{title}</NFTTitleWrapper>
       </div>

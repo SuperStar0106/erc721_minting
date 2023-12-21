@@ -6,13 +6,6 @@ import { pinJSONToIPFS } from "./pinata";
 import dotenv from "dotenv";
 import axios from "axios";
 
-import {
-  Alchemy,
-  AlchemySubscription,
-  Network,
-  NftMetadata,
-} from "alchemy-sdk";
-
 dotenv.config();
 const alchemyKey =
   "https://eth-mainnet.alchemyapi.io/v2/IBpIkwZ8PYa6_9AfDtFu9xLCzhRA2ztk";
@@ -224,23 +217,12 @@ export const mintNFT = async (
     );
     console.log("contract721: ", contract721);
 
-    // get list owned nfts
-    console.log("result: ", contract721.baseURI());
-    let balance = await contract721.balanceOf(walletAddress);
-    balance += 1;
-    console.log("balance: ", balance);
-    for (let i = 0; i < balance; i++) {
-      const tokenId = await contract721.tokenOfOwnerByIndex(walletAddress, i);
-      console.log(`Token ID: ${tokenId}`);
-    }
-
-    // const tx = await contract721.mint(walletAddress, tokenURI);
-    // const receipt = await tx.wait();
+    const tx = await contract721.mint(walletAddress, tokenURI);
+    const receipt = await tx.wait();
 
     return {
       success: true,
-      // status: receipt,
-      status: "ok",
+      status: receipt,
     };
   } catch (err) {
     const error = err as Error;

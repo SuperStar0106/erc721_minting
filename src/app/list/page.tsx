@@ -22,12 +22,13 @@ const List: React.FC = () => {
   const [isShowing, setIsShowing] = useState<boolean>(false);
   const [selectedNFT, setSelectedNFT] = useState<{
     title: string;
-    img: StaticImageData | null;
-  }>({ title: "", img: null });
+    img: string | null;
+    description: string;
+  }>({ title: "", img: null, description: "" });
   const [nfts, setNfts] = useState<NftMetadata[]>([]);
 
-  const showModal = (title: string, img: StaticImageData) => {
-    setSelectedNFT({ title, img });
+  const showModal = (title: string, img: string, description: string) => {
+    setSelectedNFT({ title, img, description });
     setIsShowing(true);
   };
 
@@ -52,26 +53,15 @@ const List: React.FC = () => {
     <>
       <LabelCardComponent title="Listing Owned NFTs" />
       <NFTGridWrapper>
-        <NFTCardComponent
-          showModal={showModal}
-          title="Dorippa Panthera1"
-          img={fish}
-        />
-        <NFTCardComponent
-          showModal={showModal}
-          title="Dorippa Panthera2"
-          img={fish}
-        />
-        <NFTCardComponent
-          showModal={showModal}
-          title="Dorippa Panthera3"
-          img={fish}
-        />
-        <NFTCardComponent
-          showModal={showModal}
-          title="Dorippa Panthera4"
-          img={fish}
-        />
+        {nfts.map((nft, index) => (
+          <NFTCardComponent
+            key={index}
+            showModal={showModal}
+            title={nft.name}
+            img={nft.image}
+            description={nft.description}
+          />
+        ))}
       </NFTGridWrapper>
       <ModalComponent hideModal={hideModal} isShowing={isShowing}>
         <div style={{ display: "flex", gap: "30px", marginBottom: "30px" }}>
@@ -82,6 +72,8 @@ const List: React.FC = () => {
                 src={selectedNFT.img}
                 objectFit="cover"
                 style={{ width: "80%", height: "80%" }}
+                width={100}
+                height={100}
                 priority={true}
               />
             )}
@@ -90,10 +82,7 @@ const List: React.FC = () => {
             <NFTTitleWrapper>{selectedNFT.title}</NFTTitleWrapper>
             <NFTDescWrapper>Description</NFTDescWrapper>
             <NFTDescriptionWrapper>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet, a
-              habitant a consequat elementum nisl. Phasellus facilisis urna
-              facilisis aliquet enim congue. Libero amet proin phasellus
-              pretium.
+              {selectedNFT.description}
             </NFTDescriptionWrapper>
           </div>
         </div>
