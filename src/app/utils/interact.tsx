@@ -1,4 +1,3 @@
-import Web3 from "web3";
 import { ethers } from "ethers";
 import Moralis from "moralis";
 import { EvmChain } from "@moralisweb3/common-evm-utils";
@@ -32,14 +31,12 @@ export const getMintedNFT = async (
     });
 
     for (const nft of response.result) {
-      console.log(`Token ID: ${nft.tokenId}`);
       if (nft.tokenUri) {
         const metadata = await getNFTInfo(nft.tokenUri);
         metadataList.push(metadata);
       }
     }
 
-    console.log("response: ", metadataList);
     return {
       success: true,
       result: metadataList,
@@ -111,7 +108,6 @@ export const mintNFT = async (
       contract721ABI,
       signer
     );
-    console.log("contract721: ", contract721);
 
     const tx = await contract721.mint(walletAddress, tokenURI);
     const receipt = await tx.wait();

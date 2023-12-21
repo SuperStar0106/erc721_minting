@@ -4,7 +4,7 @@ import {
   NFTImageWrapper,
   NFTTitleWrapper,
 } from "./index.style";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 
 type NFTCardComponentProps = {
   showModal: (title: string, img: string, description: string) => void;

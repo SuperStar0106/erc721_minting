@@ -26,7 +26,7 @@ const List: React.FC = () => {
     description: string;
   }>({ title: "", img: null, description: "" });
   const [nfts, setNfts] = useState<NftMetadata[]>([]);
-  const { active, getAccount, connect, disconnect } = useContext(WalletContext);
+  const { active, getAccount } = useContext(WalletContext);
 
   const showModal = (title: string, img: string, description: string) => {
     setSelectedNFT({ title, img, description });
@@ -46,7 +46,6 @@ const List: React.FC = () => {
 
     const fetchNFTs = async () => {
       const response = await getMintedNFT(walletAddress);
-      console.log(response);
       if (response.success) {
         setNfts(response.result);
       }

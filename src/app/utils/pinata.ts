@@ -6,10 +6,6 @@ const url = process.env.NEXT_PUBLIC_PINATA_API_URL;
 const pinataApiKey = process.env.NEXT_PUBLIC_PINATA_API_KEY;
 const pinataSecretApiKey = process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY;
 
-interface PinataResponse {
-  IpfsHash: string;
-}
-
 interface PinIPFSResponse {
   success: boolean;
   pinataUrl?: string;
