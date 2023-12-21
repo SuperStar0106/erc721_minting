@@ -5,14 +5,7 @@ import { EvmChain } from "@moralisweb3/common-evm-utils";
 import { pinJSONToIPFS } from "./pinata";
 import dotenv from "dotenv";
 import axios from "axios";
-
-dotenv.config();
-const alchemyKey =
-  "https://eth-mainnet.alchemyapi.io/v2/IBpIkwZ8PYa6_9AfDtFu9xLCzhRA2ztk";
 import { contract721ABI } from "../config/contract-abi";
-const contractAddress = "0x3D216932E996c025E1d417c0396b1105a68963c6";
-const web3 = new Web3(alchemyKey);
-const Provider = require("@truffle/hdwallet-provider");
 import {
   ownerPrivateKey,
   rpcURL,
@@ -20,96 +13,7 @@ import {
   ownerAddress,
 } from "../config/mint-data";
 
-interface WalletResponse {
-  address: string;
-  status: string | JSX.Element;
-}
-
-export const connectWallet = async (): Promise<WalletResponse> => {
-  if (window.ethereum) {
-    try {
-      const addressArray = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      const obj = {
-        status: "👆🏽 Write a message in the text-field above.",
-        address: addressArray[0],
-      };
-      return obj;
-    } catch (err) {
-      const error = err as Error;
-      return {
-        address: "",
-        status: "😥 " + error.message,
-      };
-    }
-  } else {
-    return {
-      address: "",
-      status: (
-        <span>
-          <p>
-            {" "}
-            🦊{" "}
-            <a target="_blank" href={`https://metamask.io/download.html`}>
-              You must install Metamask, a virtual Ethereum wallet, in your
-              browser.
-            </a>
-          </p>
-        </span>
-      ),
-    };
-  }
-};
-
-export const getCurrentWalletConnected = async (): Promise<WalletResponse> => {
-  if (window.ethereum) {
-    try {
-      const addressArray = await window.ethereum.request({
-        method: "eth_accounts",
-      });
-      if (addressArray.length > 0) {
-        return {
-          address: addressArray[0],
-          status: "👆🏽 Write a message in the text-field above.",
-        };
-      } else {
-        return {
-          address: "",
-          status: "🦊 Connect to Metamask using the top right button.",
-        };
-      }
-    } catch (err) {
-      const error = err as Error;
-      return {
-        address: "",
-        status: "😥 " + error.message,
-      };
-    }
-  } else {
-    return {
-      address: "",
-      status: (
-        <span>
-          <p>
-            {" "}
-            🦊{" "}
-            <a target="_blank" href={`https://metamask.io/download.html`}>
-              You must install Metamask, a virtual Ethereum wallet, in your
-              browser.
-            </a>
-          </p>
-        </span>
-      ),
-    };
-  }
-};
-
-type ContractInstance = InstanceType<typeof web3.eth.Contract>;
-
-async function loadContract(): Promise<ContractInstance> {
-  return new web3.eth.Contract(contract721ABI as any, contractAddress);
-}
+dotenv.config();
 
 interface MintedNFTResponse {
   success: boolean;
@@ -121,8 +25,7 @@ export const getMintedNFT = async (
 ): Promise<MintedNFTResponse> => {
   try {
     await Moralis.start({
-      apiKey:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjNmZTEwOGI4LTU3ZjMtNDdmOC1hODYwLWFjZDQ2YzdjMjJiOCIsIm9yZ0lkIjoiMzY4MjM0IiwidXNlcklkIjoiMzc4NDUzIiwidHlwZUlkIjoiYmE1MjA0NDUtZGUzYS00ZWIzLTk1MmUtZGEzMWE4ZTUzZGZkIiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MDI1ODU2ODQsImV4cCI6NDg1ODM0NTY4NH0.kz1RO9E9bvioVJp7UJGEFmsP_p9yHaOH8dAw3ibSzq4",
+      apiKey: process.env.NEXT_PUBLIC_MORALIS_API_KEY,
     });
 
     const chain = EvmChain.GOERLI;

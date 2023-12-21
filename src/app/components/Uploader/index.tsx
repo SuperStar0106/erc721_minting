@@ -48,7 +48,6 @@ export const UploaderComponent: React.FC<UploaderComponentProps> = (props) => {
                 handleFileChange(e);
               },
             }))}
-          // multiple
         />
 
         {image ? (

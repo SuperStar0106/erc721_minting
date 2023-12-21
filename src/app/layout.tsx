@@ -23,6 +23,10 @@ import {
 } from "./layout.style";
 
 const inter = Inter({ subsets: ["latin"] });
+interface MyContextType {
+  address: string;
+  setAddress: React.Dispatch<React.SetStateAction<string>>;
+}
 
 export default function RootLayout({
   children,

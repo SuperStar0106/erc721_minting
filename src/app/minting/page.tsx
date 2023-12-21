@@ -1,6 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+
 import {
   LabelCardComponent,
   UploaderComponent,
@@ -12,8 +15,8 @@ import {
   TextWrapper,
   ButtonDivWrapper,
 } from "./page.style";
-import { pinFileToIPFS, mintNFT, getMintedNFT } from "../utils";
-import { useForm } from "react-hook-form";
+import { pinFileToIPFS, mintNFT } from "../utils";
+import { WalletContext } from "../context";
 
 type FormValuesProps = {
   name: string;
@@ -22,49 +25,42 @@ type FormValuesProps = {
 };
 
 const Minting: React.FC = () => {
-  const { register, handleSubmit } = useForm<FormValuesProps>();
-
-  const [file, setFile] = useState<File | null>(null);
-  // const [walletAddress, setWallet] = useState("");
-  // const [status, setStatus] = useState("");
-
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [url, setURL] = useState("");
+  const { active, getAccount } = useContext(WalletContext);
+  const { register, handleSubmit, reset } = useForm<FormValuesProps>();
+  const [withList, setWithList] = useState<boolean>(false);
+  const router = useRouter();
 
   const onSubmit = async (data: FormValuesProps) => {
-    console.log("input data: ", data);
-    const name = data.name;
-    const description = data.description;
+    console.log(withList);
+    if (!active) {
+      console.log("You must connect your wallet.");
+      return false;
+    }
+
+    const walletAddress = getAccount();
 
     const pinataFileResponse = await pinFileToIPFS(data.image[0]);
     if (!pinataFileResponse.success || !pinataFileResponse.pinataUrl) {
       console.log(pinataFileResponse.message);
-      return;
+      return false;
     }
 
-    pinataFileResponse.pinataUrl && setURL(pinataFileResponse.pinataUrl);
     console.log("pinata file upload response: ", pinataFileResponse);
 
     const { success, status } = await mintNFT(
       pinataFileResponse.pinataUrl,
       data.name,
       data.description,
-      "0x6b79b791b9eA07A08c7f5fc09c4a9576Ae0ba62c"
+      walletAddress
     );
 
     if (success) {
-      setName("");
-      setDescription("");
-      setURL("");
+      console.log("mint success: ", status);
+      await reset();
+      if (withList) router.push("/list");
     } else {
-      console.log("upload token status: ", status);
+      console.log("mint status: ", status);
     }
-    console.log("mint nft result: ", success);
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFile(event.target.files ? event.target.files[0] : null);
   };
 
   return (
@@ -75,21 +71,29 @@ const Minting: React.FC = () => {
       />
       <MintingFormWrapper onSubmit={handleSubmit(onSubmit)}>
         <UploaderComponent register={register} fieldName="image" />
-        <StyledInputWrapper
-          {...register("name")}
-          // onChange={(event) => setName(event.target.value)}
-        />
-        <TextWrapper
-          placeholder="Description"
-          {...register("description")}
-          // onChange={(event) => setDescription(event.target.value)}
-        />
+        <StyledInputWrapper {...register("name")} />
+        <TextWrapper placeholder="Description" {...register("description")} />
         <div style={{ minWidth: "545px", display: "flex" }}>
-          <ButtonDivWrapper>Mint without listing</ButtonDivWrapper>
+          <ButtonDivWrapper>
+            <ButtonComponent
+              style={{
+                width: "100%",
+                height: "63px",
+                background: "none",
+                boxShadow: "none",
+              }}
+              type="submit"
+              onClick={() => setWithList(false)}
+            >
+              Mint without listing
+            </ButtonComponent>
+          </ButtonDivWrapper>
           <ButtonDivWrapper>
             <ButtonComponent
               style={{ width: "100%", height: "63px" }}
               type="submit"
+              name="mintAndList"
+              onClick={() => setWithList(true)}
             >
               Mint and list immediately
             </ButtonComponent>
