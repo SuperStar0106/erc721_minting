@@ -1,11 +1,16 @@
 import React, { createContext } from "react";
 import { useWeb3React } from "@web3-react/core";
-import { injectedConnector } from "../connectors";
+import {
+  injectedConnector,
+  portisConnector,
+  torusConnector,
+  walletConnectConnector,
+} from "../connectors";
 
 type IWalletContextProps = {
   account: string;
   active: boolean;
-  connect: () => Promise<void>;
+  connect: (walletType: string) => Promise<void>;
   disconnect: () => void;
   getAccount: () => string;
 };
@@ -29,15 +34,26 @@ export const WalletContextProvider: React.FC<WalletContextProviderProps> = (
 
   const { account, active, activate, deactivate } = useWeb3React();
 
-  const handleConnect = async () => {
+  const handleConnect = async (walletType: string) => {
+    let connector;
+    switch (walletType) {
+      case "metamask":
+        connector = injectedConnector;
+        break;
+      case "portis":
+        connector = portisConnector;
+      case "torus":
+        connector = torusConnector;
+      case "walletConnect":
+        connector = walletConnectConnector;
+      default:
+        console.error("Unsupported wallet");
+        break;
+    }
     try {
-      if (window.ethereum !== undefined) {
-        await activate(injectedConnector);
-        sessionStorage.setItem("isConnected", "connected");
-      } else {
-        alert("Please install Metamask wallet in your browser.");
-      }
-    } catch (error: unknown) {
+      if (connector) await activate(connector);
+      sessionStorage.setItem("isConnected", "connected");
+    } catch (error) {
       console.error(error);
     }
   };
@@ -62,7 +78,7 @@ export const WalletContextProvider: React.FC<WalletContextProviderProps> = (
       value={{
         account: "",
         active: active,
-        connect: handleConnect,
+        connect: (walletType: string) => handleConnect(walletType),
         disconnect: handleDisconnect,
         getAccount: getAccount,
       }}
