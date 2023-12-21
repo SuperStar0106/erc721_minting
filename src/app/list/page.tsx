@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   LabelCardComponent,
   NFTCardComponent,
@@ -13,10 +13,10 @@ import {
   NFTDescWrapper,
   NFTDescriptionWrapper,
 } from "./page.style";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { getMintedNFT } from "../utils";
 import { NftMetadata } from "../types/metadata";
-import fish from "./fish.png";
+import { WalletContext } from "../context";
 
 const List: React.FC = () => {
   const [isShowing, setIsShowing] = useState<boolean>(false);
@@ -26,6 +26,7 @@ const List: React.FC = () => {
     description: string;
   }>({ title: "", img: null, description: "" });
   const [nfts, setNfts] = useState<NftMetadata[]>([]);
+  const { active, getAccount, connect, disconnect } = useContext(WalletContext);
 
   const showModal = (title: string, img: string, description: string) => {
     setSelectedNFT({ title, img, description });
@@ -37,10 +38,15 @@ const List: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!active) {
+      console.log("You must connect your wallet.");
+      return;
+    }
+    const walletAddress = getAccount();
+
     const fetchNFTs = async () => {
-      const response = await getMintedNFT(
-        "0x6b79b791b9eA07A08c7f5fc09c4a9576Ae0ba62c"
-      );
+      const response = await getMintedNFT(walletAddress);
+      console.log(response);
       if (response.success) {
         setNfts(response.result);
       }

@@ -6,12 +6,7 @@ import { pinJSONToIPFS } from "./pinata";
 import dotenv from "dotenv";
 import axios from "axios";
 import { contract721ABI } from "../config/contract-abi";
-import {
-  ownerPrivateKey,
-  rpcURL,
-  campNFT721Address,
-  ownerAddress,
-} from "../config/mint-data";
+import { campNFT721Address } from "../config/mint-data";
 
 dotenv.config();
 
@@ -20,22 +15,21 @@ interface MintedNFTResponse {
   result: NftMetadata[];
 }
 
+Moralis.start({
+  apiKey: process.env.NEXT_PUBLIC_MORALIS_API_KEY,
+});
+
 export const getMintedNFT = async (
   walletAddress: string
 ): Promise<MintedNFTResponse> => {
   try {
-    await Moralis.start({
-      apiKey: process.env.NEXT_PUBLIC_MORALIS_API_KEY,
-    });
-
+    const metadataList: NftMetadata[] = [];
     const chain = EvmChain.GOERLI;
 
     const response = await Moralis.EvmApi.nft.getWalletNFTs({
       address: walletAddress,
       chain,
     });
-
-    const metadataList: NftMetadata[] = [];
 
     for (const nft of response.result) {
       console.log(`Token ID: ${nft.tokenId}`);
@@ -46,7 +40,6 @@ export const getMintedNFT = async (
     }
 
     console.log("response: ", metadataList);
-
     return {
       success: true,
       result: metadataList,

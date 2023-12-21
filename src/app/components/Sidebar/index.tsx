@@ -42,7 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
     const connected = sessionStorage.getItem("isConnected");
     if (connected === "connected") {
       if (!active) {
-        connect(currentWallet);
+        connect("metamask");
       } else {
         disconnect();
       }
