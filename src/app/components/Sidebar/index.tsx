@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+
 import {
   SidebarWrapper,
   CloseButton,
@@ -23,12 +24,16 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
   const [clickedButton, setClickedButton] = useState<{
     [key: number]: boolean;
   }>({});
+  const [currentWallet, setCurrentWallet] = useState<string>("");
 
-  const handleClick = async (index: number) => {
+  const handleClick = async (index: number, connectId: string) => {
+    console.log(connectId);
     if (!active) {
-      await connect();
+      await connect(connectId);
+      setCurrentWallet(connectId);
     } else {
-      disconnect();
+      await disconnect();
+      setCurrentWallet("");
     }
     setClickedButton({ [index]: true });
   };
@@ -37,7 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
     const connected = sessionStorage.getItem("isConnected");
     if (connected === "connected") {
       if (!active) {
-        connect();
+        connect("metamask");
       } else {
         disconnect();
       }
@@ -60,7 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
                   active && clickedButton[index] ? getAccount() : item.title
                 }`}
                 active={active && clickedButton[index]}
-                onClick={() => handleClick(index)}
+                onClick={() => handleClick(index, item.connectorId)}
               >
                 {<item.icon />}
               </ConnectButtonComponent>

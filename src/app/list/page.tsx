@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   LabelCardComponent,
   NFTCardComponent,
@@ -13,18 +13,23 @@ import {
   NFTDescWrapper,
   NFTDescriptionWrapper,
 } from "./page.style";
-import Image, { StaticImageData } from "next/image";
-import fish from "./fish.png";
+import Image from "next/image";
+import { getMintedNFT } from "../utils";
+import { NftMetadata } from "../types/metadata";
+import { WalletContext } from "../context";
 
 const List: React.FC = () => {
   const [isShowing, setIsShowing] = useState<boolean>(false);
   const [selectedNFT, setSelectedNFT] = useState<{
     title: string;
-    img: StaticImageData | null;
-  }>({ title: "", img: null });
+    img: string | null;
+    description: string;
+  }>({ title: "", img: null, description: "" });
+  const [nfts, setNfts] = useState<NftMetadata[]>([]);
+  const { active, getAccount, connect, disconnect } = useContext(WalletContext);
 
-  const showModal = (title: string, img: StaticImageData) => {
-    setSelectedNFT({ title, img });
+  const showModal = (title: string, img: string, description: string) => {
+    setSelectedNFT({ title, img, description });
     setIsShowing(true);
   };
 
@@ -32,30 +37,37 @@ const List: React.FC = () => {
     setIsShowing(false);
   };
 
+  useEffect(() => {
+    if (!active) {
+      console.log("You must connect your wallet.");
+      return;
+    }
+    const walletAddress = getAccount();
+
+    const fetchNFTs = async () => {
+      const response = await getMintedNFT(walletAddress);
+      console.log(response);
+      if (response.success) {
+        setNfts(response.result);
+      }
+    };
+
+    fetchNFTs();
+  }, []);
+
   return (
     <>
       <LabelCardComponent title="Listing Owned NFTs" />
       <NFTGridWrapper>
-        <NFTCardComponent
-          showModal={showModal}
-          title="Dorippa Panthera1"
-          img={fish}
-        />
-        <NFTCardComponent
-          showModal={showModal}
-          title="Dorippa Panthera2"
-          img={fish}
-        />
-        <NFTCardComponent
-          showModal={showModal}
-          title="Dorippa Panthera3"
-          img={fish}
-        />
-        <NFTCardComponent
-          showModal={showModal}
-          title="Dorippa Panthera4"
-          img={fish}
-        />
+        {nfts.map((nft, index) => (
+          <NFTCardComponent
+            key={index}
+            showModal={showModal}
+            title={nft.name}
+            img={nft.image}
+            description={nft.description}
+          />
+        ))}
       </NFTGridWrapper>
       <ModalComponent hideModal={hideModal} isShowing={isShowing}>
         <div style={{ display: "flex", gap: "30px", marginBottom: "30px" }}>
@@ -66,6 +78,8 @@ const List: React.FC = () => {
                 src={selectedNFT.img}
                 objectFit="cover"
                 style={{ width: "80%", height: "80%" }}
+                width={100}
+                height={100}
                 priority={true}
               />
             )}
@@ -74,10 +88,7 @@ const List: React.FC = () => {
             <NFTTitleWrapper>{selectedNFT.title}</NFTTitleWrapper>
             <NFTDescWrapper>Description</NFTDescWrapper>
             <NFTDescriptionWrapper>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Amet, a
-              habitant a consequat elementum nisl. Phasellus facilisis urna
-              facilisis aliquet enim congue. Libero amet proin phasellus
-              pretium.
+              {selectedNFT.description}
             </NFTDescriptionWrapper>
           </div>
         </div>
