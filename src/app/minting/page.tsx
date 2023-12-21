@@ -3,7 +3,6 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-
 import {
   LabelCardComponent,
   UploaderComponent,
@@ -31,7 +30,6 @@ const Minting: React.FC = () => {
   const router = useRouter();
 
   const onSubmit = async (data: FormValuesProps) => {
-    console.log(withList);
     if (!active) {
       console.log("You must connect your wallet.");
       return false;
@@ -41,11 +39,8 @@ const Minting: React.FC = () => {
 
     const pinataFileResponse = await pinFileToIPFS(data.image[0]);
     if (!pinataFileResponse.success || !pinataFileResponse.pinataUrl) {
-      console.log(pinataFileResponse.message);
       return false;
     }
-
-    console.log("pinata file upload response: ", pinataFileResponse);
 
     const { success, status } = await mintNFT(
       pinataFileResponse.pinataUrl,

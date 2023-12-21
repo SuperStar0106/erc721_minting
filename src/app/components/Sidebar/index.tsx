@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-
 import {
   SidebarWrapper,
   CloseButton,
@@ -24,16 +23,12 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
   const [clickedButton, setClickedButton] = useState<{
     [key: number]: boolean;
   }>({});
-  const [currentWallet, setCurrentWallet] = useState<string>("");
 
   const handleClick = async (index: number, connectId: string) => {
-    console.log(connectId);
     if (!active) {
       await connect(connectId);
-      setCurrentWallet(connectId);
     } else {
       await disconnect();
-      setCurrentWallet("");
     }
     setClickedButton({ [index]: true });
   };

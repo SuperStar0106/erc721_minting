@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent } from "react";
 import Image from "next/image";
 import { FormWrapper, UploadContent } from "./index.style";
 import { UseFormRegister } from "react-hook-form";

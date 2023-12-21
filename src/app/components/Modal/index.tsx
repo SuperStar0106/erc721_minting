@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   ModalWrapper,
   ModalHeader,
   ModalContent,
   CloseButton,
 } from "./index.style";
-import { NFTCardComponent } from "..";
 
 type ModalComponentProps = {
   hideModal: () => void;
